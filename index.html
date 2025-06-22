@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biradar ACCA - Ledger & Trial Balance</title>
+    <title>Biradar ACCA - Accounting Tool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -22,6 +22,9 @@
             --danger: #e74c3c;
             --warning: #f39c12;
             --dark: #34495e;
+            --suspense: #e67e22;
+            --omission: #8e44ad;
+            --trial: #1abc9c;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --border-radius: 8px;
         }
@@ -199,6 +202,15 @@
             background: #27ae60;
         }
 
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
         .btn-danger {
             background: var(--danger);
             color: white;
@@ -257,6 +269,21 @@
             font-weight: 600;
         }
 
+        .suspense {
+            color: var(--suspense);
+            font-weight: 600;
+        }
+
+        .omission {
+            color: var(--omission);
+            font-weight: 600;
+        }
+
+        .trial {
+            color: var(--trial);
+            font-weight: 600;
+        }
+
         .trial-balance-summary {
             display: flex;
             justify-content: space-between;
@@ -301,6 +328,16 @@
             border-left: 4px solid var(--danger);
         }
 
+        .notification-warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--warning);
+        }
+
+        .notification-info {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid var(--secondary);
+        }
+
         .notification i {
             font-size: 1.5rem;
         }
@@ -331,28 +368,6 @@
             font-size: 0.9rem;
             border-top: 1px solid #eee;
             margin-top: 3rem;
-        }
-
-        .account-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .account-tag {
-            background: var(--light);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .account-tag i {
-            cursor: pointer;
-            color: var(--danger);
         }
 
         .datalist-container {
@@ -443,6 +458,66 @@
             color: var(--danger);
         }
 
+        .special-account {
+            border-left: 4px solid;
+            padding-left: 0.8rem;
+        }
+
+        .special-account.suspense {
+            border-color: var(--suspense);
+        }
+
+        .special-account.omission {
+            border-color: var(--omission);
+        }
+
+        .special-account.trial {
+            border-color: var(--trial);
+        }
+
+        .account-type-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .suspense-tag {
+            background-color: rgba(230, 126, 34, 0.1);
+            color: var(--suspense);
+        }
+
+        .omission-tag {
+            background-color: rgba(142, 68, 173, 0.1);
+            color: var(--omission);
+        }
+
+        .trial-tag {
+            background-color: rgba(26, 188, 156, 0.1);
+            color: var(--trial);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .suspense-badge {
+            background-color: rgba(230, 126, 34, 0.1);
+            color: var(--suspense);
+        }
+
+        .omission-badge {
+            background-color: rgba(142, 68, 173, 0.1);
+            color: var(--omission);
+        }
+
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -502,6 +577,7 @@
                     <li><a href="#" data-tab="entries">Journal Entries</a></li>
                     <li><a href="#" data-tab="trial-balance">Trial Balance</a></li>
                     <li><a href="#" data-tab="ledger">Ledger</a></li>
+                    <li><a href="#" data-tab="suspense">Suspense</a></li>
                 </ul>
             </nav>
         </div>
@@ -513,6 +589,7 @@
             <div class="tab" data-tab="entries">Journal Entries</div>
             <div class="tab" data-tab="trial-balance">Trial Balance</div>
             <div class="tab" data-tab="ledger">Ledger</div>
+            <div class="tab" data-tab="suspense">Suspense/Omission</div>
         </div>
         
         <div class="tab-content active" id="accounts-tab">
@@ -538,6 +615,9 @@
                                 <option value="equity">Equity</option>
                                 <option value="revenue">Revenue</option>
                                 <option value="expense">Expense</option>
+                                <option value="suspense">Suspense</option>
+                                <option value="omission">Omission</option>
+                                <option value="trial">Trial</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -605,6 +685,12 @@
                         <div class="form-group">
                             <label for="description">Description</label>
                             <textarea id="description" rows="2" placeholder="Enter transaction description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="isOmission">
+                                <label for="isOmission">Mark as omission</label>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-success btn-block">Add Journal Entry</button>
                     </form>
@@ -703,11 +789,61 @@
                 </div>
             </div>
         </div>
+        
+        <div class="tab-content" id="suspense-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Suspense Account</h2>
+                        <div class="card-icon" style="background-color: var(--suspense);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <div class="notification notification-warning">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <strong>Suspense Account</strong> is used when the trial balance doesn't match. 
+                            The difference is temporarily held here until the error is found.
+                        </div>
+                    </div>
+                    <div id="suspenseContent">
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h3>No Suspense Account</h3>
+                            <p>Create a suspense account to use this feature</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Omission Entries</h2>
+                        <div class="card-icon" style="background-color: var(--omission);">
+                            <i class="fas fa-eye-slash"></i>
+                        </div>
+                    </div>
+                    <div class="notification notification-info">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <strong>Omission Entries</strong> are transactions that were accidentally omitted 
+                            from the books and need to be recorded separately.
+                        </div>
+                    </div>
+                    <div id="omissionContent">
+                        <div class="empty-state">
+                            <i class="fas fa-eye-slash"></i>
+                            <h3>No Omission Entries</h3>
+                            <p>Mark journal entries as omissions to see them here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer>
         <p>© 2025 Biradar ACCA - Accounting Tool for Students. All rights reserved.</p>
-        <p>Designed for ACCA exam preparation | Ledger and Trial Balance Calculator</p>
+        <p>Designed for ACCA exam preparation | Complete Ledger and Trial Balance Solution</p>
     </footer>
 
     <script>
@@ -715,11 +851,32 @@
         let accounts = JSON.parse(localStorage.getItem('biradarAccounts')) || [];
         let entries = JSON.parse(localStorage.getItem('biradarEntries')) || [];
         
+        // Create default suspense account if none exists
+        if (!accounts.some(acc => acc.type === 'suspense')) {
+            accounts.push({
+                id: Date.now(),
+                name: "Suspense Account",
+                type: "suspense",
+                number: "SUSP-001",
+                createdAt: new Date().toISOString()
+            });
+        }
+        
+        // Create default omission account if none exists
+        if (!accounts.some(acc => acc.type === 'omission')) {
+            accounts.push({
+                id: Date.now(),
+                name: "Omission Adjustment",
+                type: "omission",
+                number: "OMIT-001",
+                createdAt: new Date().toISOString()
+            });
+        }
+        
+        // Save accounts
+        localStorage.setItem('biradarAccounts', JSON.stringify(accounts));
+        
         // DOM Elements
-        const accountsTab = document.getElementById('accounts-tab');
-        const entriesTab = document.getElementById('entries-tab');
-        const trialBalanceTab = document.getElementById('trial-balance-tab');
-        const ledgerTab = document.getElementById('ledger-tab');
         const accountsList = document.getElementById('accountsList');
         const entriesList = document.getElementById('entriesList');
         const trialBalanceContent = document.getElementById('trialBalanceContent');
@@ -727,6 +884,8 @@
         const balanceNotification = document.getElementById('balanceNotification');
         const ledgerContent = document.getElementById('ledgerContent');
         const ledgerBalance = document.getElementById('ledgerBalance');
+        const suspenseContent = document.getElementById('suspenseContent');
+        const omissionContent = document.getElementById('omissionContent');
         const datalist = document.getElementById('accountsListDatalist');
         
         // Initialize with current date
@@ -738,6 +897,8 @@
             renderEntries();
             updateTrialBalance();
             updateDatalist();
+            renderSuspenseAccount();
+            renderOmissionEntries();
             
             // Navigation switching
             document.querySelectorAll('nav a').forEach(link => {
@@ -807,6 +968,7 @@
                 const creditAccount = document.getElementById('creditAccount').value.trim();
                 const creditAmount = parseFloat(document.getElementById('creditAmount').value);
                 const description = document.getElementById('description').value.trim();
+                const isOmission = document.getElementById('isOmission').checked;
                 
                 // Validate accounts
                 const debitAccountObj = accounts.find(acc => acc.name === debitAccount);
@@ -845,6 +1007,7 @@
                     creditAccount,
                     creditAmount,
                     description: description || 'Journal Entry',
+                    isOmission,
                     createdAt: new Date().toISOString()
                 };
                 
@@ -852,8 +1015,10 @@
                 saveEntries();
                 renderEntries();
                 updateTrialBalance();
+                renderOmissionEntries();
                 this.reset();
                 document.getElementById('entryDate').valueAsDate = new Date();
+                document.getElementById('isOmission').checked = false;
                 
                 showNotification('Journal entry added successfully!', 'success');
             });
@@ -914,10 +1079,15 @@
             `;
             
             accounts.forEach(account => {
+                let typeClass = '';
+                if (account.type === 'suspense') typeClass = 'suspense-tag';
+                if (account.type === 'omission') typeClass = 'omission-tag';
+                if (account.type === 'trial') typeClass = 'trial-tag';
+                
                 html += `
-                    <tr>
+                    <tr class="${account.type === 'suspense' || account.type === 'omission' || account.type === 'trial' ? 'special-account ' + account.type : ''}">
                         <td>${account.name}</td>
-                        <td>${account.type.charAt(0).toUpperCase() + account.type.slice(1)}</td>
+                        <td><span class="account-type-tag ${typeClass}">${account.type.charAt(0).toUpperCase() + account.type.slice(1)}</span></td>
                         <td>${account.number}</td>
                         <td>
                             <button class="btn btn-danger btn-sm" onclick="deleteAccount(${account.id})">
@@ -970,9 +1140,11 @@
             const sortedEntries = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
             
             sortedEntries.forEach(entry => {
+                const omissionBadge = entry.isOmission ? '<span class="badge omission-badge">Omission</span>' : '';
+                
                 html += `
                     <tr>
-                        <td>${entry.date}</td>
+                        <td>${entry.date} ${omissionBadge}</td>
                         <td>${entry.debitAccount}</td>
                         <td>${entry.creditAccount}</td>
                         <td>$${entry.debitAmount.toFixed(2)}</td>
@@ -1066,12 +1238,26 @@
                 totalDebit += account.debit;
                 totalCredit += account.credit;
                 
+                let rowClass = '';
+                let amountClass = '';
+                
+                if (account.type === 'suspense') {
+                    rowClass = 'special-account suspense';
+                    amountClass = 'suspense';
+                } else if (account.type === 'omission') {
+                    rowClass = 'special-account omission';
+                    amountClass = 'omission';
+                } else if (account.type === 'trial') {
+                    rowClass = 'special-account trial';
+                    amountClass = 'trial';
+                }
+                
                 html += `
-                    <tr>
+                    <tr class="${rowClass}">
                         <td>${accountName}</td>
                         <td>${account.type.charAt(0).toUpperCase() + account.type.slice(1)}</td>
-                        <td class="debit">${account.debit > 0 ? account.debit.toFixed(2) : ''}</td>
-                        <td class="credit">${account.credit > 0 ? account.credit.toFixed(2) : ''}</td>
+                        <td class="${amountClass}">${account.debit > 0 ? account.debit.toFixed(2) : ''}</td>
+                        <td class="${amountClass}">${account.credit > 0 ? account.credit.toFixed(2) : ''}</td>
                     </tr>
                 `;
             });
@@ -1099,15 +1285,130 @@
                     </div>
                 `;
             } else {
+                const diff = Math.abs(totalDebit - totalCredit).toFixed(2);
                 balanceNotification.innerHTML = `
                     <div class="notification notification-error">
                         <i class="fas fa-exclamation-circle"></i>
                         <div>
-                            <strong>Not Balanced!</strong> Debits: $${totalDebit.toFixed(2)} | Credits: $${totalCredit.toFixed(2)}
+                            <strong>Not Balanced!</strong> 
+                            <p>Debits: $${totalDebit.toFixed(2)} | Credits: $${totalCredit.toFixed(2)}</p>
+                            <p>Difference: $${diff} - Add this to Suspense Account to balance</p>
                         </div>
                     </div>
                 `;
             }
+        }
+        
+        // Render suspense account information
+        function renderSuspenseAccount() {
+            const suspenseAccount = accounts.find(acc => acc.type === 'suspense');
+            
+            if (!suspenseAccount) {
+                suspenseContent.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>No Suspense Account</h3>
+                        <p>Create a suspense account to use this feature</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Calculate suspense account balance
+            let suspenseBalance = 0;
+            
+            entries.forEach(entry => {
+                if (entry.debitAccount === suspenseAccount.name) {
+                    suspenseBalance += entry.debitAmount;
+                }
+                if (entry.creditAccount === suspenseAccount.name) {
+                    suspenseBalance -= entry.creditAmount;
+                }
+            });
+            
+            suspenseContent.innerHTML = `
+                <div class="notification ${suspenseBalance !== 0 ? 'notification-warning' : 'notification-success'}">
+                    <i class="fas fa-${suspenseBalance !== 0 ? 'exclamation-triangle' : 'check-circle'}"></i>
+                    <div>
+                        <h3>Suspense Account: ${suspenseAccount.name}</h3>
+                        <p>Current Balance: <span class="${suspenseBalance > 0 ? 'debit' : 'credit'}">$${Math.abs(suspenseBalance).toFixed(2)} (${suspenseBalance > 0 ? 'Debit' : 'Credit'})</span></p>
+                        <p>${suspenseBalance !== 0 ? 'This account has an outstanding balance that needs to be resolved.' : 'The suspense account is balanced.'}</p>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label>Add to Suspense Account to Balance Trial</label>
+                    <button class="btn btn-warning btn-block" onclick="balanceWithSuspense()">
+                        <i class="fas fa-balance-scale"></i> Balance with Suspense Account
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Render omission entries
+        function renderOmissionEntries() {
+            const omissionEntries = entries.filter(entry => entry.isOmission);
+            
+            if (omissionEntries.length === 0) {
+                omissionContent.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-eye-slash"></i>
+                        <h3>No Omission Entries</h3>
+                        <p>Mark journal entries as omissions to see them here</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <h3 style="margin-bottom: 1rem;">Omitted Journal Entries</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Debit Account</th>
+                                <th>Credit Account</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            omissionEntries.forEach(entry => {
+                html += `
+                    <tr>
+                        <td>${entry.date}</td>
+                        <td>${entry.description}</td>
+                        <td>${entry.debitAccount}</td>
+                        <td>${entry.creditAccount}</td>
+                        <td>$${entry.debitAmount.toFixed(2)}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="deleteEntry(${entry.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="notification notification-info" style="margin-top: 1.5rem;">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Note:</strong> Omission entries are transactions that were accidentally omitted 
+                        from the original books. They should be recorded separately to maintain accounting accuracy.
+                    </div>
+                </div>
+            `;
+            
+            omissionContent.innerHTML = html;
         }
         
         // Render account ledger
@@ -1194,6 +1495,76 @@
             `;
         }
         
+        // Balance trial with suspense account
+        function balanceWithSuspense() {
+            // Calculate trial balance totals
+            let totalDebit = 0;
+            let totalCredit = 0;
+            
+            // Calculate balances for each account
+            const balances = {};
+            accounts.forEach(account => {
+                balances[account.name] = { debit: 0, credit: 0 };
+            });
+            
+            entries.forEach(entry => {
+                if (balances[entry.debitAccount]) {
+                    balances[entry.debitAccount].debit += entry.debitAmount;
+                }
+                if (balances[entry.creditAccount]) {
+                    balances[entry.creditAccount].credit += entry.creditAmount;
+                }
+            });
+            
+            // Calculate totals
+            Object.keys(balances).forEach(accountName => {
+                totalDebit += balances[accountName].debit;
+                totalCredit += balances[accountName].credit;
+            });
+            
+            const difference = Math.abs(totalDebit - totalCredit).toFixed(2);
+            
+            if (Math.abs(totalDebit - totalCredit) < 0.01) {
+                showNotification('Trial balance is already balanced!', 'success');
+                return;
+            }
+            
+            const suspenseAccount = accounts.find(acc => acc.type === 'suspense');
+            if (!suspenseAccount) {
+                showNotification('Suspense account not found!', 'error');
+                return;
+            }
+            
+            const today = new Date().toISOString().split('T')[0];
+            const entry = {
+                id: Date.now(),
+                date: today,
+                description: "Balance adjustment using suspense account",
+                createdAt: new Date().toISOString()
+            };
+            
+            if (totalDebit > totalCredit) {
+                // Need to credit suspense account
+                entry.creditAccount = suspenseAccount.name;
+                entry.creditAmount = parseFloat(difference);
+                entry.debitAccount = "Suspense Adjustment";
+                entry.debitAmount = parseFloat(difference);
+            } else {
+                // Need to debit suspense account
+                entry.debitAccount = suspenseAccount.name;
+                entry.debitAmount = parseFloat(difference);
+                entry.creditAccount = "Suspense Adjustment";
+                entry.creditAmount = parseFloat(difference);
+            }
+            
+            entries.push(entry);
+            saveEntries();
+            updateTrialBalance();
+            renderSuspenseAccount();
+            
+            showNotification(`Trial balanced using suspense account with $${difference} adjustment`, 'success');
+        }
+        
         // Delete an account
         function deleteAccount(id) {
             if (confirm('Are you sure you want to delete this account? All related journal entries will also be deleted.')) {
@@ -1214,6 +1585,8 @@
                 renderEntries();
                 updateTrialBalance();
                 updateDatalist();
+                renderSuspenseAccount();
+                renderOmissionEntries();
                 
                 showNotification('Account deleted successfully', 'success');
             }
@@ -1226,6 +1599,8 @@
                 saveEntries();
                 renderEntries();
                 updateTrialBalance();
+                renderSuspenseAccount();
+                renderOmissionEntries();
                 
                 showNotification('Journal entry deleted successfully', 'success');
             }
@@ -1265,6 +1640,7 @@
         window.addEventListener('DOMContentLoaded', initApp);
         window.deleteAccount = deleteAccount;
         window.deleteEntry = deleteEntry;
+        window.balanceWithSuspense = balanceWithSuspense;
     </script>
 </body>
 </html>
