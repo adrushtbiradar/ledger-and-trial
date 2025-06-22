@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biradar ACCA - Ledger & Trial Balance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #9b59b6;
+            --light: #ecf0f1;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #34495e;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .card-icon {
+            background: var(--secondary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        input, select, button, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--light);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .debit {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .credit {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .trial-balance-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .trial-balance-summary div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .trial-balance-summary .total-debit {
+            color: var(--success);
+        }
+
+        .trial-balance-summary .total-credit {
+            color: var(--danger);
+        }
+
+        .notification {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-success {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--success);
+        }
+
+        .notification-error {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--danger);
+        }
+
+        .notification i {
+            font-size: 1.5rem;
+        }
+
+        .notification-success i {
+            color: var(--success);
+        }
+
+        .notification-error i {
+            color: var(--danger);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #95a5a6;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 3rem;
+        }
+
+        .account-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .account-tag {
+            background: var(--light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .account-tag i {
+            cursor: pointer;
+            color: var(--danger);
+        }
+
+        .datalist-container {
+            position: relative;
+        }
+
+        .datalist-container input {
+            width: 100%;
+        }
+
+        .datalist-container datalist {
+            position: absolute;
+            background: white;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            z-index: 10;
+            display: none;
+        }
+
+        .datalist-container datalist option {
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .datalist-container datalist option:hover {
+            background-color: var(--light);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--secondary);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .ledger-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ledger-account-select {
+            flex: 1;
+        }
+
+        .ledger-balance {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .ledger-balance .debit {
+            color: var(--success);
+        }
+
+        .ledger-balance .credit {
+            color: var(--danger);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .trial-balance-summary {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .ledger-controls {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            nav ul {
+                gap: 0.5rem;
+            }
+            
+            nav a {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <h1>Biradar <span>ACCA</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-tab="accounts">Accounts</a></li>
+                    <li><a href="#" data-tab="entries">Journal Entries</a></li>
+                    <li><a href="#" data-tab="trial-balance">Trial Balance</a></li>
+                    <li><a href="#" data-tab="ledger">Ledger</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="accounts">Accounts</div>
+            <div class="tab" data-tab="entries">Journal Entries</div>
+            <div class="tab" data-tab="trial-balance">Trial Balance</div>
+            <div class="tab" data-tab="ledger">Ledger</div>
+        </div>
+        
+        <div class="tab-content active" id="accounts-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Create Account</h2>
+                        <div class="card-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                    </div>
+                    <form id="accountForm">
+                        <div class="form-group">
+                            <label for="accountName">Account Name</label>
+                            <input type="text" id="accountName" placeholder="e.g., Cash, Accounts Payable" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="accountType">Account Type</label>
+                            <select id="accountType" required>
+                                <option value="">Select Account Type</option>
+                                <option value="asset">Asset</option>
+                                <option value="liability">Liability</option>
+                                <option value="equity">Equity</option>
+                                <option value="revenue">Revenue</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="accountNumber">Account Number (Optional)</label>
+                            <input type="text" id="accountNumber" placeholder="e.g., 1001, 2001">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Your Accounts</h2>
+                        <div class="card-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div id="accountsList">
+                        <div class="empty-state">
+                            <i class="fas fa-folder-open"></i>
+                            <h3>No Accounts Created</h3>
+                            <p>Add your first account to get started</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="entries-tab">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Add Journal Entry</h2>
+                        <div class="card-icon">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                    </div>
+                    <form id="entryForm">
+                        <div class="form-group">
+                            <label for="entryDate">Date</label>
+                            <input type="date" id="entryDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="debitAccount">Debit Account</label>
+                            <div class="datalist-container">
+                                <input type="text" id="debitAccount" list="accountsListDatalist" placeholder="Type or select account" required>
+                                <datalist id="accountsListDatalist"></datalist>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="debitAmount">Debit Amount ($)</label>
+                            <input type="number" id="debitAmount" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="creditAccount">Credit Account</label>
+                            <div class="datalist-container">
+                                <input type="text" id="creditAccount" list="accountsListDatalist" placeholder="Type or select account" required>
+                                <datalist id="accountsListDatalist"></datalist>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="creditAmount">Credit Amount ($)</label>
+                            <input type="number" id="creditAmount" placeholder="0.00" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" rows="2" placeholder="Enter transaction description"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">Add Journal Entry</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Journal Entries</h2>
+                        <div class="card-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                    </div>
+                    <div id="entriesList">
+                        <div class="empty-state">
+                            <i class="fas fa-file-alt"></i>
+                            <h3>No Journal Entries</h3>
+                            <p>Add your first journal entry to see it here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="trial-balance-tab">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Trial Balance</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                </div>
+                
+                <div id="balanceNotification">
+                    <div class="notification notification-success">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Balanced!</strong> Total debits equal total credits.
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="trialBalanceContent">
+                    <div class="empty-state">
+                        <i class="fas fa-calculator"></i>
+                        <h3>No Trial Balance Data</h3>
+                        <p>Add accounts and journal entries to generate trial balance</p>
+                    </div>
+                </div>
+                
+                <div class="trial-balance-summary" style="display: none;" id="balanceSummary">
+                    <div>
+                        <span>Total Debit</span>
+                        <span class="total-debit">$0.00</span>
+                    </div>
+                    <div>
+                        <span>Total Credit</span>
+                        <span class="total-credit">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="ledger-tab">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Account Ledger</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                </div>
+                
+                <div class="ledger-controls">
+                    <div class="form-group ledger-account-select">
+                        <label for="ledgerAccount">Select Account</label>
+                        <div class="datalist-container">
+                            <input type="text" id="ledgerAccount" list="accountsListDatalist" placeholder="Type or select account" required>
+                            <datalist id="accountsListDatalist"></datalist>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button id="viewLedgerBtn" class="btn btn-primary">View Ledger</button>
+                    </div>
+                </div>
+                
+                <div id="ledgerContent">
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Select an Account</h3>
+                        <p>Choose an account to view its ledger transactions</p>
+                    </div>
+                </div>
+                
+                <div class="ledger-balance" style="display: none;" id="ledgerBalance">
+                    <div>Account Balance: <span id="accountBalance">$0.00</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Biradar ACCA - Accounting Tool for Students. All rights reserved.</p>
+        <p>Designed for ACCA exam preparation | Ledger and Trial Balance Calculator</p>
+    </footer>
+
+    <script>
+        // Data storage
+        let accounts = JSON.parse(localStorage.getItem('biradarAccounts')) || [];
+        let entries = JSON.parse(localStorage.getItem('biradarEntries')) || [];
+        
+        // DOM Elements
+        const accountsTab = document.getElementById('accounts-tab');
+        const entriesTab = document.getElementById('entries-tab');
+        const trialBalanceTab = document.getElementById('trial-balance-tab');
+        const ledgerTab = document.getElementById('ledger-tab');
+        const accountsList = document.getElementById('accountsList');
+        const entriesList = document.getElementById('entriesList');
+        const trialBalanceContent = document.getElementById('trialBalanceContent');
+        const balanceSummary = document.getElementById('balanceSummary');
+        const balanceNotification = document.getElementById('balanceNotification');
+        const ledgerContent = document.getElementById('ledgerContent');
+        const ledgerBalance = document.getElementById('ledgerBalance');
+        const datalist = document.getElementById('accountsListDatalist');
+        
+        // Initialize with current date
+        document.getElementById('entryDate').valueAsDate = new Date();
+        
+        // Initialize the app
+        function initApp() {
+            renderAccounts();
+            renderEntries();
+            updateTrialBalance();
+            updateDatalist();
+            
+            // Navigation switching
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    
+                    link.classList.add('active');
+                    const tabName = link.dataset.tab;
+                    document.getElementById(`${tabName}-tab`).classList.add('active');
+                    document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+                });
+            });
+            
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+                });
+            });
+            
+            // Account form submission
+            document.getElementById('accountForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('accountName').value.trim();
+                const type = document.getElementById('accountType').value;
+                const number = document.getElementById('accountNumber').value.trim();
+                
+                if (!name || !type) return;
+                
+                // Check if account already exists
+                if (accounts.some(acc => acc.name.toLowerCase() === name.toLowerCase())) {
+                    showNotification('Account with this name already exists!', 'error');
+                    return;
+                }
+                
+                const account = {
+                    id: Date.now(),
+                    name,
+                    type,
+                    number: number || `ACC-${Math.floor(1000 + Math.random() * 9000)}`,
+                    createdAt: new Date().toISOString()
+                };
+                
+                accounts.push(account);
+                saveAccounts();
+                renderAccounts();
+                updateDatalist();
+                this.reset();
+                
+                showNotification('Account created successfully!', 'success');
+            });
+            
+            // Entry form submission
+            document.getElementById('entryForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const date = document.getElementById('entryDate').value;
+                const debitAccount = document.getElementById('debitAccount').value.trim();
+                const debitAmount = parseFloat(document.getElementById('debitAmount').value);
+                const creditAccount = document.getElementById('creditAccount').value.trim();
+                const creditAmount = parseFloat(document.getElementById('creditAmount').value);
+                const description = document.getElementById('description').value.trim();
+                
+                // Validate accounts
+                const debitAccountObj = accounts.find(acc => acc.name === debitAccount);
+                const creditAccountObj = accounts.find(acc => acc.name === creditAccount);
+                
+                if (!debitAccountObj) {
+                    showNotification('Debit account does not exist!', 'error');
+                    return;
+                }
+                
+                if (!creditAccountObj) {
+                    showNotification('Credit account does not exist!', 'error');
+                    return;
+                }
+                
+                if (debitAccount === creditAccount) {
+                    showNotification('Debit and credit accounts cannot be the same', 'error');
+                    return;
+                }
+                
+                if (debitAmount <= 0 || creditAmount <= 0) {
+                    showNotification('Amount must be greater than zero', 'error');
+                    return;
+                }
+                
+                if (debitAmount !== creditAmount) {
+                    showNotification('Debit and credit amounts must be equal', 'error');
+                    return;
+                }
+                
+                const entry = {
+                    id: Date.now(),
+                    date,
+                    debitAccount,
+                    debitAmount,
+                    creditAccount,
+                    creditAmount,
+                    description: description || 'Journal Entry',
+                    createdAt: new Date().toISOString()
+                };
+                
+                entries.push(entry);
+                saveEntries();
+                renderEntries();
+                updateTrialBalance();
+                this.reset();
+                document.getElementById('entryDate').valueAsDate = new Date();
+                
+                showNotification('Journal entry added successfully!', 'success');
+            });
+            
+            // Ledger view button
+            document.getElementById('viewLedgerBtn').addEventListener('click', function() {
+                const accountName = document.getElementById('ledgerAccount').value.trim();
+                if (!accountName) {
+                    showNotification('Please select an account', 'error');
+                    return;
+                }
+                
+                const account = accounts.find(acc => acc.name === accountName);
+                if (!account) {
+                    showNotification('Account not found!', 'error');
+                    return;
+                }
+                
+                renderLedger(account);
+            });
+        }
+        
+        // Save accounts to localStorage
+        function saveAccounts() {
+            localStorage.setItem('biradarAccounts', JSON.stringify(accounts));
+        }
+        
+        // Save entries to localStorage
+        function saveEntries() {
+            localStorage.setItem('biradarEntries', JSON.stringify(entries));
+        }
+        
+        // Render accounts list
+        function renderAccounts() {
+            if (accounts.length === 0) {
+                accountsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <h3>No Accounts Created</h3>
+                        <p>Add your first account to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Account Name</th>
+                                <th>Type</th>
+                                <th>Number</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            accounts.forEach(account => {
+                html += `
+                    <tr>
+                        <td>${account.name}</td>
+                        <td>${account.type.charAt(0).toUpperCase() + account.type.slice(1)}</td>
+                        <td>${account.number}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="deleteAccount(${account.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            accountsList.innerHTML = html;
+        }
+        
+        // Render journal entries
+        function renderEntries() {
+            if (entries.length === 0) {
+                entriesList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>No Journal Entries</h3>
+                        <p>Add your first journal entry to see it here</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Account (Debit)</th>
+                                <th>Account (Credit)</th>
+                                <th>Amount</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Sort entries by date (newest first)
+            const sortedEntries = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedEntries.forEach(entry => {
+                html += `
+                    <tr>
+                        <td>${entry.date}</td>
+                        <td>${entry.debitAccount}</td>
+                        <td>${entry.creditAccount}</td>
+                        <td>$${entry.debitAmount.toFixed(2)}</td>
+                        <td>${entry.description}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="deleteEntry(${entry.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            entriesList.innerHTML = html;
+        }
+        
+        // Update datalist options
+        function updateDatalist() {
+            datalist.innerHTML = '';
+            accounts.forEach(account => {
+                const option = document.createElement('option');
+                option.value = account.name;
+                datalist.appendChild(option);
+            });
+        }
+        
+        // Calculate and render trial balance
+        function updateTrialBalance() {
+            if (accounts.length === 0 || entries.length === 0) {
+                trialBalanceContent.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calculator"></i>
+                        <h3>No Trial Balance Data</h3>
+                        <p>Add accounts and journal entries to generate trial balance</p>
+                    </div>
+                `;
+                balanceSummary.style.display = 'none';
+                balanceNotification.innerHTML = '';
+                return;
+            }
+            
+            // Calculate balances for each account
+            const balances = {};
+            
+            // Initialize with zero balances
+            accounts.forEach(account => {
+                balances[account.name] = {
+                    type: account.type,
+                    debit: 0,
+                    credit: 0
+                };
+            });
+            
+            // Process journal entries
+            entries.forEach(entry => {
+                if (balances[entry.debitAccount]) {
+                    balances[entry.debitAccount].debit += entry.debitAmount;
+                }
+                
+                if (balances[entry.creditAccount]) {
+                    balances[entry.creditAccount].credit += entry.creditAmount;
+                }
+            });
+            
+            // Generate table
+            let html = `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Type</th>
+                                <th>Debit ($)</th>
+                                <th>Credit ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            let totalDebit = 0;
+            let totalCredit = 0;
+            
+            Object.keys(balances).forEach(accountName => {
+                const account = balances[accountName];
+                totalDebit += account.debit;
+                totalCredit += account.credit;
+                
+                html += `
+                    <tr>
+                        <td>${accountName}</td>
+                        <td>${account.type.charAt(0).toUpperCase() + account.type.slice(1)}</td>
+                        <td class="debit">${account.debit > 0 ? account.debit.toFixed(2) : ''}</td>
+                        <td class="credit">${account.credit > 0 ? account.credit.toFixed(2) : ''}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            trialBalanceContent.innerHTML = html;
+            balanceSummary.style.display = 'flex';
+            
+            document.querySelector('.total-debit').textContent = `$${totalDebit.toFixed(2)}`;
+            document.querySelector('.total-credit').textContent = `$${totalCredit.toFixed(2)}`;
+            
+            // Update notification
+            if (Math.abs(totalDebit - totalCredit) < 0.01) {
+                balanceNotification.innerHTML = `
+                    <div class="notification notification-success">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Balanced!</strong> Total debits equal total credits.
+                        </div>
+                    </div>
+                `;
+            } else {
+                balanceNotification.innerHTML = `
+                    <div class="notification notification-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div>
+                            <strong>Not Balanced!</strong> Debits: $${totalDebit.toFixed(2)} | Credits: $${totalCredit.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Render account ledger
+        function renderLedger(account) {
+            // Get all transactions for this account
+            const accountEntries = entries.filter(entry => 
+                entry.debitAccount === account.name || entry.creditAccount === account.name
+            );
+            
+            if (accountEntries.length === 0) {
+                ledgerContent.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>No Transactions Found</h3>
+                        <p>This account has no journal entries yet</p>
+                    </div>
+                `;
+                ledgerBalance.style.display = 'none';
+                return;
+            }
+            
+            // Sort by date (oldest first for ledger)
+            accountEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            let html = `
+                <h3 style="margin-bottom: 1rem;">Ledger for ${account.name}</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Debit ($)</th>
+                                <th>Credit ($)</th>
+                                <th>Balance ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            let balance = 0;
+            
+            accountEntries.forEach(entry => {
+                let debit = 0;
+                let credit = 0;
+                
+                if (entry.debitAccount === account.name) {
+                    debit = entry.debitAmount;
+                    balance += debit;
+                } else if (entry.creditAccount === account.name) {
+                    credit = entry.creditAmount;
+                    balance -= credit;
+                }
+                
+                html += `
+                    <tr>
+                        <td>${entry.date}</td>
+                        <td>${entry.description}</td>
+                        <td class="debit">${debit > 0 ? debit.toFixed(2) : ''}</td>
+                        <td class="credit">${credit > 0 ? credit.toFixed(2) : ''}</td>
+                        <td>${balance.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            ledgerContent.innerHTML = html;
+            ledgerBalance.style.display = 'block';
+            
+            // Determine balance type
+            const balanceType = account.type === 'asset' || account.type === 'expense' ? 
+                (balance >= 0 ? 'debit' : 'credit') : 
+                (balance >= 0 ? 'credit' : 'debit');
+            
+            const displayBalance = Math.abs(balance).toFixed(2);
+            
+            document.getElementById('accountBalance').innerHTML = `
+                <span class="${balanceType}">$${displayBalance} (${balanceType})</span>
+            `;
+        }
+        
+        // Delete an account
+        function deleteAccount(id) {
+            if (confirm('Are you sure you want to delete this account? All related journal entries will also be deleted.')) {
+                // Delete account
+                const accountName = accounts.find(acc => acc.id === id)?.name;
+                accounts = accounts.filter(acc => acc.id !== id);
+                
+                // Delete related entries
+                if (accountName) {
+                    entries = entries.filter(entry => 
+                        entry.debitAccount !== accountName && entry.creditAccount !== accountName
+                    );
+                    saveEntries();
+                }
+                
+                saveAccounts();
+                renderAccounts();
+                renderEntries();
+                updateTrialBalance();
+                updateDatalist();
+                
+                showNotification('Account deleted successfully', 'success');
+            }
+        }
+        
+        // Delete a journal entry
+        function deleteEntry(id) {
+            if (confirm('Are you sure you want to delete this journal entry?')) {
+                entries = entries.filter(entry => entry.id !== id);
+                saveEntries();
+                renderEntries();
+                updateTrialBalance();
+                
+                showNotification('Journal entry deleted successfully', 'success');
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.classList.add('notification', `notification-${type}`);
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '1000';
+            notification.style.maxWidth = '400px';
+            notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle"></i>
+                <div>${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Initialize the app
+        window.addEventListener('DOMContentLoaded', initApp);
+        window.deleteAccount = deleteAccount;
+        window.deleteEntry = deleteEntry;
+    </script>
+</body>
+</html>
